@@ -1,0 +1,9 @@
+img:hover {
+    display: block;
+    
+    will-change: transform;
+    filter: blur();
+    -webkit-transition: -webkit-transform 1.2s cubic-bezier(.25,.46,.45,.94);
+    -moz-transition: -moz-transform 1.2s cubic-bezier(.25,.46,.45,.94);
+    transition: transform 1.2s cubic-bezier(.25,.46,.45,.94);
+} 

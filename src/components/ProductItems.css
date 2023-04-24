@@ -1,0 +1,18 @@
+
+
+.addcart::after {
+    /* top: -2px; */
+    position: relative;
+    content: '+';
+    /* width: 20px;
+    height: 20px; */
+    font-family: ElegantIcons;
+    margin-left: 13px;
+    font-size: 18px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 15px;
+    font-weight: 800;
+    color: white;
+    /* background-color: white; */
+}

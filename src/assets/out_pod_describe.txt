@@ -1,0 +1,87 @@
+Name:         mongo-2
+Namespace:    qa
+Priority:     0
+Node:         datebaseqa01/ip
+Start Time:   Mon, 18 Apr 2022 15:02:39 -0500
+Labels:       controller-revision-hash=mongo-7dcc9bd6cf
+              environment=qa
+              role=mongo
+              statefulset.kubernetes.io/pod-name=mongo-2
+Annotations:  <none>
+Status:       Running
+IP:           ip
+IPs:
+  IP:          ip
+Controlled By:  StatefulSet/mongo
+Containers:
+  mongo:
+    Container ID:  docker://b46a5433119ef182d288833d39e64750551f1838c97304d26463f7f610377eac
+    Image:         mongo:4.2.7
+    Image ID:      docker-pullable://mongo@sha256:d080599e887a18a67b09dbcda4af227b6d2d9a7c4fc5602c25208fba749a8cf2
+    Port:          27017/TCP
+    Host Port:     0/TCP
+    Command:
+      mongod
+      --replSet
+      rs0
+      --bind_ip_all
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    14
+      Started:      Mon, 09 May 2022 12:20:32 -0500
+      Finished:     Mon, 09 May 2022 12:20:59 -0500
+    Ready:          False
+    Restart Count:  5534
+    Limits:
+      cpu:     2
+      memory:  4Gi
+    Requests:
+      cpu:        1
+      memory:     2Gi
+    Environment:  <none>
+    Mounts:
+      /data/db from nfs-pvc-mongo-evk (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from mongo-token-h7nfv (ro)
+  mongo-sidecar:
+    Container ID:   docker://adb3486e16ce86cf25294c8cb962c2dbe843f47f93e1bb2ef347c4ada6c53944
+    Image:          cvallance/mongo-k8s-sidecar
+    Image ID:       docker-pullable://cvallance/mongo-k8s-sidecar@sha256:cd62d32db488fbf78dfbaef020edd7fc09ee4d3fe5d50cc0579e747e8232c77f
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Mon, 18 Apr 2022 15:02:42 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MONGO_SIDECAR_POD_LABELS:       role=mongo,environment=qa
+      KUBECTL_NAMESPACE:              qa
+      KUBERNETES_MONGO_SERVICE_NAME:  mongo
+      KUBE_NAMESPACE:                 qa
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from mongo-token-h7nfv (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  nfs-pvc-mongo-evk:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  nfs-pvc-mongo-evk-mongo-2
+    ReadOnly:   false
+  mongo-token-h7nfv:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  mongo-token-h7nfv
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  nodeT=db
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason   Age                       From     Message
+  ----     ------   ----                      ----     -------
+  Normal   Pulled   38m (x5529 over 20d)      kubelet  Container image "mongo:4.2.7" already present on machine
+  Warning  BackOff  3m16s (x130075 over 20d)  kubelet  Back-off restarting failed container

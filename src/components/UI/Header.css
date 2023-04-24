@@ -1,0 +1,12 @@
+.paintingcategory:hover .authordesc {
+    visibility: visible;
+
+        /* color: green; */
+        /* font-size: 25px; */
+    
+}
+
+ .authordesc {
+    visibility: hidden;
+
+}
