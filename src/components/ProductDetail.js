@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import productCatsImg from "../assets/product-img-5.png";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductsById } from "../store/slice/ProductSlice";
+import { getProductsById, getProducts } from "../store/slice/ProductSlice";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
@@ -22,12 +22,17 @@ const ProductDetail = ({ props }) => {
   const [quantity, setQuantity] = useState(1);
 
   // const [cartItems, setcartItems] = useState([]);
-  const { getProductById, status } = useSelector((state) => state.products);
+  const { getProductById, getProduct } = useSelector((state) => state.products);
 
   useEffect(() => {
     console.log(props);
     dispatch(getProductsById(_Id));
   }, []);
+
+  useEffect(() => {
+    dispatch(getProducts)
+  }, [])
+  
 
   console.log(getProductById);
   const handleReduce = () => {
@@ -66,7 +71,7 @@ const ProductDetail = ({ props }) => {
         <div className="bg-[#f2f2f2] h-fit">
           <img
             src={getProductById?.result?.product.images[0].url}
-            className="h-[500px] w-[500px]"
+            className="h-[300px] w-full object-fill"
             alt="prod-img"
           />
         </div>
@@ -75,11 +80,12 @@ const ProductDetail = ({ props }) => {
             {getProductById?.result?.product.name}
           </p>
           <div className="flex items-center mt-4">
-            <AiFillStar />
-            <AiFillStar />
-            <AiFillStar />
-            <AiFillStar /> 
-            <AiFillStar />
+            
+            <AiOutlineStar className='text-black' style={{color: 'red'}} />
+            <AiOutlineStar />
+            <AiOutlineStar />
+            <AiOutlineStar /> 
+            <AiOutlineStar />
             <p className="ml-3 text-sm">(1 customer review)</p>
           </div>
           <p className="my-4 text-sm font-semibold">
@@ -119,9 +125,9 @@ const ProductDetail = ({ props }) => {
           <Reviews />
         </div>
       </div>
-      <div className=" mx-28">
+      <div className=" sm:mx-16 mx-10  md:mx-28">
         <p className="text-base font-semibold">Related Products</p>
-        <RelatedProducts />
+        <RelatedProducts getProduct={getProduct} _Id={_Id} category={getProductById?.result?.product.category.name} />
       </div>
     </div>
   );

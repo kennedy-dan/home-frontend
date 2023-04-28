@@ -306,10 +306,10 @@ const NewProducts = ({ getProduct }) => {
             Order now for an express delivery in 24h!
           </p>
           <button className="md:py-3 md:px-7 border-black border">
-            <div className="flex justify-between items-center">
+            <Link to='/checkout' className="flex justify-between items-center">
               <p className="text-gray pr-3 md:text-lg text-[8px]">View more</p>
               <MdKeyboardArrowRight className="" />
-            </div>
+            </Link>
           </button>
         </div>
       </div>

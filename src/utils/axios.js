@@ -14,9 +14,9 @@ const getToken1 = async () => {
 		console.log(err.message);
 	}
 };
-
+// https://home-backend-0n7n.onrender.com/api
 const instance = axios.create({
-	baseURL: "https://home-backend-0n7n.onrender.com/api",
+	baseURL: "http://localhost:2000/api",
 	headers: {
 		"Content-Type": "application/json",
 		"Access-Control-Allow-Origin": "*",

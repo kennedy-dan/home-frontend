@@ -78,12 +78,12 @@ const Header = () => {
             ))}
           </div>
         ))}
-        <div className="">
+        <Link to='/cart' className="">
           <BsBag style={{ height: "30px", width: "30px", color: "white" }} />
           <span class="qodef-cart-number text-white absolute top-6 left-[91%] ">
             {prodId?.length}
           </span>
-        </div>
+        </Link>
         <button onClick={logOut}>log out</button>
         {/* <Try /> */}
       </div>
