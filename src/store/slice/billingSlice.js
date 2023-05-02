@@ -4,8 +4,8 @@ import axios from "../../utils/axios";
 
 export const addBilling = createAsyncThunk("/user/address", async (address) => {
   const response = await axios.post("/user/address", address);
-
-  return response.data.data;
+  console.log(response)
+  return response.data;
 });
 
 export const getBilling = createAsyncThunk("/user/getaddress", async () => {
@@ -39,8 +39,10 @@ export const billingSlice = createSlice({
       })
       .addCase(addBilling.fulfilled, (state, { payload }) => {
         // if (!payload) return;
+        console.log(payload)
         state.billing.status = "successful";
         state.billing.result = payload;
+        toast.success(payload.message)
       });
 
     builder
