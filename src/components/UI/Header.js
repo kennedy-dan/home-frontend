@@ -7,33 +7,63 @@ import { motion } from "framer-motion";
 import { BsBag } from "react-icons/bs";
 import { logOutCustomer } from "../../store/slice/authSlice";
 import { CiSquareRemove } from "react-icons/ci";
-
+import logo from "../../assets/logo.png";
 import "./Header.css";
 import Try from "./Try";
 import { useDispatch, useSelector } from "react-redux";
-import { getCarts } from "../../store/slice/cartSlice";
+import { getCarts, removeFromCart } from "../../store/slice/cartSlice";
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
   const [nav] = useState(data.nav);
   const dispatch = useDispatch();
-  const { getcart } = useSelector((state) => state.carts);
+  const { getcart, carts } = useSelector((state) => state.carts);
   const [cartItem, setCartItems] = useState(getcart?.result?.cartItems);
+  const { user, token, loggedin } = useSelector((state) => state.auth);
 
   const [isHovered, setIsHovered] = useState(0);
+  const [deleteLoading, setdeleteLoading] = useState(false);
+  const { removeCart } = useSelector((state) => state.carts);
 
-  console.log(getcart);
-  console.log(cartItem);
+  const [cartremoved, setcartremoved] = useState(false);
+
   const logOut = () => {
     dispatch(logOutCustomer());
   };
+  const cits = JSON.parse(localStorage.getItem("cartItems"));
+  console.log(cits);
+
+  let cartItmss = {};
+
+  cits?.forEach((item, index) => {
+    cartItmss[item.product.toString()] = {
+      _id: item.product.toString(),
+      name: item.name,
+      img: item.img,
+      price: item.price,
+      qty: item.qty,
+    };
+  });
 
   useEffect(() => {
-    dispatch(getCarts());
-  }, []);
+    if (token) {
+      dispatch(getCarts());
+    } else {
+      JSON.parse(localStorage.getItem("cartItems"));
+    }
+  }, [removeCart, cartremoved, carts.status]);
 
   useEffect(() => {
-    setCartItems(getcart?.result?.cartItems);
+    JSON.parse(localStorage.getItem("cartItems"));
+  }, [cits]);
+
+  useEffect(() => {
+    if (token) {
+      setCartItems(getcart?.result?.cartItems);
+    }
+    if (!token) {
+      setCartItems(cartItmss);
+    }
   }, [getcart?.result?.cartItems]);
 
   const prodId = cartItem && Object.keys(cartItem).map((data) => data);
@@ -45,7 +75,35 @@ const Header = () => {
     setIsHovered(true);
   };
 
-  console.log(prodId?.length);
+  console.log(cartItem);
+
+  console.log(cartItmss);
+
+  const localprodId = cits && Object.keys(cartItmss).map((data) => data);
+
+  const onremoveFromCart = (id) => {
+    if (!token) {
+      const newCart = cits.filter(
+        (filteredCart) => filteredCart.product !== id
+      );
+      console.log(newCart);
+
+      localStorage.setItem("cartItems", JSON.stringify(newCart));
+    }
+    if (token) {
+      // JSON.parse(localStorage.getItem("cartItems"))
+      dispatch(removeFromCart(id));
+
+      // onRemoveFromCart(id);
+      setcartremoved(true);
+      if (id === cartItem._id) {
+        setdeleteLoading(true);
+      }
+      if (id !== cartItem._id) {
+        setdeleteLoading(false);
+      }
+    }
+  };
 
   const cartItems = (
     <div
@@ -53,36 +111,75 @@ const Header = () => {
       // onMouseOver={viewCart}
       // onMouseLeave={leaveCart}
     >
-      {cartItem &&
+      {!token &&
+        cartItmss &&
+        Object.keys(cartItmss).map((key, index) => (
+          <>
+            <div className="flex justify-between py-4">
+              <div className="flex justify-between">
+                <Link to={`product/${cartItmss[key]._id}`}>
+                  <img src={cartItmss[key].img} className="h-10 w-10" />
+                </Link>
+                <div className="text-left pl-4">
+                  <p className="text-[14px] font-bold">{cartItmss[key].name}</p>
+
+                  <p className="text-[13px] text-gray-500 mt-1">
+                    {cartItmss[key].price}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => onremoveFromCart(cartItmss[key]._id)}>
+                <CiSquareRemove />
+              </button>{" "}
+              {/* <button onClick={() => onremoveFromCart(cartItmss[key]._id)}>
+                <CiSquareRemove />
+              </button> */}
+            </div>
+          </>
+        ))}
+
+      {token &&
+        cartItem &&
         Object.keys(cartItem).map((key, index) => (
           <>
             <div className="flex justify-between py-4">
               <div className="flex justify-between">
-                <img src={cartItem[key].img} className="h-10 w-10" />
+                <Link to={`product/${cartItem[key]._id}`}>
+                  <img src={cartItem[key].img} className="h-10 w-10" />
+                </Link>
                 <div className="text-left pl-4">
                   <p className="text-[14px] font-bold">{cartItem[key].name}</p>
 
-                  <p className="text-[13px] text-gray-500 mt-1">{cartItem[key].price}</p>
+                  <p className="text-[13px] text-gray-500 mt-1">
+                    {cartItem[key].price}
+                  </p>
                 </div>
               </div>
-
-              <button>
+              <button onClick={() => onremoveFromCart(cartItem[key]._id)}>
                 <CiSquareRemove />
-              </button>
+              </button>{" "}
+              {/* <button onClick={() => onremoveFromCart(cartItmss[key]._id)}>
+                <CiSquareRemove />
+              </button> */}
             </div>
           </>
         ))}
       <div className="flex justify-between">
         <p>Total:</p>
-        <p className='font-bold text-gray-600 text-[13px]'>
-          {cartItem &&
-            Object.keys(getcart?.result?.cartItems).reduce(
-              (totalPrice, key) => {
-                const { price, qty } = getcart?.result?.cartItems[key];
-                return totalPrice + price * qty;
-              },
-              0
-            )}
+        <p className="font-bold text-gray-600 text-[13px]">
+          {!token &&
+            cartItmss &&
+            Object.keys(cartItmss).reduce((totalPrice, key) => {
+              const { price, qty } = cartItmss[key];
+              return totalPrice + price * qty;
+            }, 0)}
+
+          {token &&
+            cartItem &&
+            Object.keys(cartItem).reduce((totalPrice, key) => {
+              const { price, qty } = cartItem[key];
+              return totalPrice + price * qty;
+            }, 0)}
         </p>
       </div>
       <Link to="/cart">
@@ -101,12 +198,13 @@ const Header = () => {
   return (
     <div className={`flex justify-between h-16   items-center`}>
       <Link to="/">
+        {/* <img src={logo} className="w-40 h-24 object-contain" alt="logo" /> */}
         <p
-          className={`text-2xl md:ml-10 ml-5 font-semibold ${
+          className={` text-2xl md:text-4xl md:ml-14 ml-5 font-semibold ${
             location.pathname === "/" ? "text-white" : "text-black"
           }`}
         >
-          Home
+          Nerrido
         </p>
       </Link>
       <div className="w-8">
@@ -154,8 +252,9 @@ const Header = () => {
             ))}
           </div>
         ))}
-        <Link to="/cart" className="">
-          <div className="" onMouseOver={viewCart} onMouseLeave={leaveCart}>
+        {/* <Link to="/cart" className=""> */}
+        <div className="" onMouseOver={viewCart} onMouseLeave={leaveCart}>
+          <Link to="/cart">
             <div className="flex items-center h-28">
               <div className="relative inline-block align-middle overflow-hidden">
                 <BsBag
@@ -172,31 +271,31 @@ const Header = () => {
                       location.pathname === "/" ? "text-white" : "text-black"
                     } absolute top-[26%] left-[35%] text-[14px] `}
                   >
-                    {prodId?.length}
+                    {token ? prodId?.length : localprodId?.length}
                   </p>
                 </div>
               </div>
             </div>
-
-            <motion.div
-              onMouseOver={viewCart}
-              onMouseLeave={leaveCart}
-              initial={{ display: "none", scale: 0 }}
-              transition={{
-                duration: 1,
-                type: "spring",
-              }}
-              animate={{
-                scale: isHovered ? 1 : 0,
-                display: "",
-                // overflow: 'hidden'
-              }}
-              className="fixed top-20 right-[2%] w-[260px] overflow-hidden"
-            >
-              {cartItems}
-            </motion.div>
-          </div>
-        </Link>
+          </Link>
+          <motion.div
+            onMouseOver={viewCart}
+            onMouseLeave={leaveCart}
+            initial={{ display: "none", scale: 0 }}
+            transition={{
+              duration: 1,
+              type: "spring",
+            }}
+            animate={{
+              scale: isHovered ? 1 : 0,
+              display: "",
+              // overflow: 'hidden'
+            }}
+            className="fixed top-20 right-[2%] w-[260px] overflow-hidden"
+          >
+            {cartItems}
+          </motion.div>
+        </div>
+        {/* </Link> */}
         {/* <button onClick={logOut}>log out</button> */}
         {/* <Try /> */}
       </div>

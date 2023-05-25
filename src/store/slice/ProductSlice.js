@@ -32,6 +32,12 @@ export const getProductsById = createAsyncThunk(
   }
 );
 
+export const addReview = createAsyncThunk("/addReview", async (reviews) => {
+  const response = await axios.put(`/product/reviews`, reviews);
+
+  return response.data;
+});
+
 const initialState = {
   status: "idle",
   results: null,
@@ -48,6 +54,10 @@ const initialState = {
     result: null,
   },
   getProductById: {
+    status: "idle",
+    result: null,
+  },
+  addRev: {
     status: "idle",
     result: null,
   },
@@ -101,6 +111,14 @@ export const productSlice = createSlice({
         state.status = "successful";
         state.getProductById.status = "successful";
         state.getProductById.result = payload;
+      });
+    builder
+      .addCase(addReview.pending, (state) => {
+        state.addRev.status = "loading";
+      })
+      .addCase(addReview.fulfilled, (state, { payload }) => {
+        state.addRev.status = "successful";
+        state.addRev.result = payload;
       });
   },
 });

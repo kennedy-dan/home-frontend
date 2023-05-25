@@ -16,12 +16,12 @@ const Blog = () => {
   console.log(mappedBlog);
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:mx-32 md:mx-20 mx-6  mt-20">
+    <div className="grid grid-cols-2 gap-3 lg:mx-32 md:mx-20 mx-6  md:mt-20 mt-10">
       {mappedBlog?.map((blogs) => (
         <div className="overflow-hidden">
           <img
             src={blogs?.images?.images}
-            className="w-[520px] h-[300px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-transparent duration-1000"
+            className="md:w-[520px] md:h-[300px] h-[130px] w-[400px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-transparent duration-1000"
           />
           <p className="text-center md:mt-10 mt-5 md:text-sm text-[9px] text-black">
             May 21, 2018 | by Nicole Burke

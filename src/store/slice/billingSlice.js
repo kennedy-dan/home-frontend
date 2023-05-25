@@ -1,14 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "../../utils/axios";
+import { useSelector } from "react-redux";
+
 
 export const addBilling = createAsyncThunk("/user/address", async (address) => {
+
   const response = await axios.post("/user/address", address);
   console.log(response)
   return response.data;
 });
 
 export const getBilling = createAsyncThunk("/user/getaddress", async () => {
+
   const response = await axios.get("/user/address");
   console.log(response.data);
   return response.data;

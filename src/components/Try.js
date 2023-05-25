@@ -1,49 +1,39 @@
-import React, {useState} from 'react'
-import axios from 'axios'
+import React, { useEffect } from "react";
+import axios from "axios";
+import mom1 from "../../src/assets/mom1.jpg";
+import mom2 from "../../src/assets/mom2.jpg";
 const Try = () => {
-  const [images, setImages] = useState([]);
+  // useEffect(() => {
+  //   const reqOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       // "Content-Length": 0,
+  //       "Content-Type": "application/json",
+  //       "Access-Control-Allow-Origin": "*",
+  //       // "X-Auth-Token": "c8e7e31d3f014e2bb8f5e0d783d4ee8b",
+  //     },
+  //   };
 
-  const onChange = (e) => {
-    const files = Array.from(e.target.files);
+  //   axios.get(
+  //     "https://api.football-data.org/v4/competitions?areas=2077&plan=TIER_ONE"
+  //   );
+  // }, []);
 
-    setImages([]);
-    // setImagesPreview([]);
+  const checkk = () => {
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImages((oldArray) => [...oldArray, reader.result]);
-        //   setImagesPreview((oldArray) => [...oldArray, reader.result]);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    });
-  };
-
-
-  const name ='lola'
-  const description = 'ubbbkj nkghg'
-  const price = '2000'
-  const onSaveHandler = async () => {
-
-    const product = {
-      images, name, description, price
+    const opts = {
+      "Access-Control-Allow-Origin": "https://api.football-data.org/v4/competitions?areas=2077&plan=TIER_ONE",
     }
-    console.log(product)
-    axios.post('http://localhost:2000/api/product/create', product)
-    
+    axios.get(
+      "https://api.football-data.org/v4/competitions?areas=2077&plan=TIER_ONE", opts
+    );
   };
   return (
-    <div>
-        <input type='file' onChange={onChange}  />
-        <button size="small" onClick={() => onSaveHandler()} color='secondary' variant='contained'>
-            Create Course
-          </button>
+    <div onClick={checkk}>
+      <img src={mom1} />
+      <p></p>
     </div>
-  )
-}
+  );
+};
 
-export default Try
+export default Try;

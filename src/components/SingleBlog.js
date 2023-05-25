@@ -5,6 +5,8 @@ import { Slate, Editable, withReact } from "slate-react";
 import Image from "./Elements/Image/Image";
 import Video from "./Elements/Video/Video";
 import Links from "./Elements/Link/Link";
+import { ClipLoader } from "react-spinners";
+
 import { sizeMap, fontFamilyMap } from "./utils/SlateUtilityFunctions";
 import { withHistory } from "slate-history";
 
@@ -191,7 +193,9 @@ const Blog = () => {
     <div className="md:grid md:grid-cols-4 md:gap-12 px-16">
     <div className='m-0 p-0 col-span-3'>
       {value === undefined ? (
-        <p className="font-bold text-8xl">bjjh</p>
+       <div className='flex justify-center items-center h-screen w-full'>
+        <ClipLoader size={16} />
+       </div>
       ): <Slate editor={editor} value={value}>
       {/* <Toolbar /> */}
       <div

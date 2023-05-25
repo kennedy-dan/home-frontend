@@ -121,10 +121,10 @@ const Slider = () => {
               Shop and fun
             </p>
             <p className="text-white text-sm md:text-xl   mt-8">
-              Ut enim ad minim veniam, quis nostrud exercitation <br /> ullamco
-              ommodo consequat.
+              design and arrange the interiors of your home to <br className="hidden md:block" />
+              create a pleasing and comfortable living space
             </p>
-            <Link to='/shop'>
+            <Link to="/shop">
               <button className="py-3 px-7 border-white hover:border-black border mt-7">
                 <div className="flex justify-center text-white hover:text-black items-center">
                   <p className="text-gray pr-3">View more</p>

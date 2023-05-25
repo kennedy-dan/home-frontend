@@ -32,10 +32,7 @@ const Comments = () => {
         <div className="section-center items-center">
           {properties.map((item, indexPeople) => {
             const { id, name, comment } = item;
-            {
-              console.log(comment);
-            }
-            
+
             let position = "nextSlide";
             if (indexPeople === index) {
               position = "activeSlide";
@@ -46,16 +43,16 @@ const Comments = () => {
             ) {
               position = "lastSlide";
             }
-            console.log(position)
+
             return (
               <article
-                className={`${position} text-center mt-[-2rem] `}
+                className={`${position} text-center mt-[-2rem]`}
                 key={id}
               >
                 <div className="flex justify-center">
                   <FaComment className="w-16 h-10 mt-6 mb-4 text-center" />
                 </div>
-                <p className="leading-7 text-[20px] text-[#737373]">
+                <p className="leading-7 lg:text-[20px] text-sm text-[#737373]">
                   {comment}
                 </p>
               </article>

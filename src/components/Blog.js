@@ -181,7 +181,7 @@ const Blog = () => {
  
 
   return (
-    <div className="md:grid md:grid-cols-4 md:gap-12 px-16">
+    <div className="md:grid md:grid-cols-4 md:gap-12 px-16 py-20">
       <div className="m-0 p-0 col-span-3">
         {value == undefined ? (
           <p className="font-bold text-8xl">bjjh</p>
@@ -191,7 +191,7 @@ const Blog = () => {
               <div className='mt-10'>
                 <img src={pst.images.images} className='w-full object-contain h-fit' />
                 <div className="flex">
-                  <p className= 'text-sm'>{(pst?.createdAt).toString().substring(0,10)}</p>
+                  <p className= 'text-sm'>{(pst?.date)?.toString().substring(0,10)}</p>
                 </div>
                 <Link to={`${pst.slug}`}>
                 <p className="font-bold text-lg mt-2">{pst.name}</p>

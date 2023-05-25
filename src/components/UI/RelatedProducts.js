@@ -9,7 +9,7 @@ import { addToCart } from "../../store/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-const RelatedProducts = ({category, getProduct, }) => {
+const RelatedProducts = ({category, getProduct,token }) => {
   const dispatch = useDispatch()
   let productid = useParams();
   const _Id = productid._id;
@@ -42,7 +42,6 @@ const RelatedProducts = ({category, getProduct, }) => {
   const productId = (_id) => {
     dispatch(getProductsById(_id));
   };
-  const prodId = cartItem && Object.keys(cartItem).map((data) => data);
 
   useEffect(() => {
     dispatch(getProductsById(_Id));
@@ -51,28 +50,78 @@ const RelatedProducts = ({category, getProduct, }) => {
   useEffect(() => {
     dispatch(getProducts())
   }, [])
+  const cits = JSON.parse(localStorage.getItem("cartItems"));
+  console.log(cits);
+  let cartItmss = {};
 
-  const addtocart = (_id, name, price) => {
-    if (prodId) {
+  cits?.forEach((item, index) => {
+    cartItmss[item.product.toString()] = {
+      _id: item.product.toString(),
+      name: item.name,
+      img: item.img,
+      price: item.price,
+      qty: item.qty,
+    };
+  });
+
+  const prodId = cartItem && Object.keys(cartItem).map((data) => data);
+  const localprodId = cartItmss && Object.keys(cartItmss).map((data) => data);
+  console.log(cartItem);
+  console.log(cartItmss);
+
+  const addtocart = (_id, name, price, img) => {
+    // const { _id, name, price } = getProductById.result?.product;
+    // const img = getProductById?.result?.product.images[0].url;
+    // const product = cits.map(prods => prods.product)
+    if (prodId && token) {
       newp = prodId.find((pro) => pro === _id);
     }
-    console.log(newp);
-    console.log(_id);
-    console.log(prodId);
+
+    if (localprodId && !token) {
+      newp = localprodId.find((pro) => pro === _id);
+    }
+
     const cartItems = {
       product: _id,
       name: name,
       price: price,
       quantity: quantity,
     };
+
+    const cartItms = {
+      product: _id,
+      name: name,
+      price: price,
+      img: img,
+      qty: quantity,
+    };
     if (newp === _id) {
       toast.error("item already in cart");
     } else {
-      dispatch(addToCart({ cartItems: [cartItems] }));
+      const cart = window.localStorage.getItem("cartItems");
+
+      if (cart === null) {
+        window.localStorage.setItem("cartItems", JSON.stringify([cartItms]));
+      } else {
+        const getCurrentCart = localStorage.getItem("cartItems");
+        const currentCart = JSON.parse(getCurrentCart);
+
+        currentCart.push(cartItms);
+
+        localStorage.setItem("cartItems", JSON.stringify(currentCart));
+      }
+      // const cartItem = JSON.stringify({cartItms: cartItms})
+      // localStorage.setItem("cartItems", [cartItem])
+      //   const cits = JSON.parse(localStorage.getItem('cartItems'))
+      //  const newCart = cits.cartItms.push(cartItms)
+
+      if (token) {
+        dispatch(addToCart({ cartItems: [cartItems] }));
+      }
+
       setMon(!mon);
     }
   };
-
   // useEffect(() => {
   //   setCartItems(getcart?.result?.cartItems);
   // }, [getcart?.result?.cartItems]);
@@ -128,7 +177,7 @@ const RelatedProducts = ({category, getProduct, }) => {
                   // overflow: 'hidden'
                 }}
                 onClick={() =>
-                  addtocart(products._id, products.name, products.price)
+                  addtocart(products._id, products.name, products.price, products.images[0].url)
                 }
                 onMouseEnter={() => handleMouseCartEnter(products._id)}
                 onMouseLeave={() => handleMouseCartLeave(products._id)}

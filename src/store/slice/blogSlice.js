@@ -45,7 +45,7 @@ export const blogSlice = createSlice({
         // if (!payload) return;
         state.blog.status = "successful";
         state.blog.result = payload;
-        toast.success("blog added");
+        // toast.success("blog added");
       });
 
       builder
