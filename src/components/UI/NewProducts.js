@@ -514,7 +514,7 @@ const NewProducts = ({ getProduct }) => {
             contemporary lamps!
           </p>
           <div className="flex justify-center mt-4">
-            <Link to="/shop/lamps">
+            <Link to="/shop/LAMPS">
               <button className="md:py-3 md:px-7 py-2 px-4 border-black border">
                 <div className="flex justify-center items-center">
                   <p className="text-gray pr-3">View more</p>

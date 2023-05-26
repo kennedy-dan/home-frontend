@@ -296,7 +296,19 @@ const Header = () => {
           </motion.div>
         </div>
         {/* </Link> */}
-        {/* <button onClick={logOut}>log out</button> */}
+        {token ? (
+          <button
+            className={`py-1 px-2 text-sm  hover:border-black border ${
+              location.pathname === "/"
+                ? "text-white  border-white"
+                : "text-black border-black"
+            }`}
+            onClick={logOut}
+          >
+            log out
+          </button>
+        ) : null}
+
         {/* <Try /> */}
       </div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
